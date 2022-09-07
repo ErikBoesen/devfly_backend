@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        {% if title %}
+        <title>{{ title }} - Our Project</title>
+        <meta property="og:title" content="{{ title }} - Our Project!!!!!!!!!!!!">
+        {% else %}
+        <title>Our Project!!!!!!!!!!!!!</title>
+        <meta property="og:title" content="Our Project!!!!!!!">
+        {% endif %}
+        <meta name="viewport" content="width=device-width">
+        <meta name="description" content="A very cool website">
+        <meta name="theme-color" content="#00356b">
+        <link rel="stylesheet" href="/static/css/main.css">
+        <link rel="icon" href="https://yalemenus.com/images/logo/favicon.png" type="image/png">
+        <link rel="icon" href="https://yalemenus.com/images/logo/favicon.ico" type="image/x-icon">
+
+        <!-- Twitter preview -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:creator" content="@ErikBoesen">
+        <meta name="twitter:title" content="Yale Menus API">
+        <meta name="twitter:description" content="Access Yale Dining data with ease!">
+        <meta name="twitter:image" content="https://yalemenus.com/images/logo/feature.png">
+
+        <!-- Other platform preview -->
+        <meta property="og:url" content="https://yalemenus.com" />
+        <meta property="og:title" content="Yale Menus API" />
+        <meta property="og:description" content="Access Yale Dining data with ease!" />
+        <meta property="og:image" content="https://yalemenus.com/images/logo/feature.png" />
+
+        {% block head %}
+        {% endblock %}
+    </head>
+    <body>
+        <header>
+            <a href="/">
+                {# <img src="https://yalemenus.com/images/logo/logo.png" id="logo"> #}
+                <h2>Cool website</h2>
+            </a>
+        </header>
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+        <footer>
+            {# Add your website links, friends! #}
+            <p>Built by Nathan Ahn, Carolyn Qu, Alex Shi, Bradley Lewis, and <a href="https://erikboesen.com">Erik Boesen</a>.</p>
+        </footer>
+    </body>
+</html>
