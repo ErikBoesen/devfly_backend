@@ -1,8 +1,8 @@
 from flask import Blueprint, request, abort, g
 
 from app import app, db
-#from app.models import
-from app.util import to_json, succ, fail
+from app.models import User, Project
+from app.util import to_json, succ, fail, get_now
 
 import datetime
 
@@ -58,7 +58,50 @@ def requires_login(f):
     return wrapper_requires_login
 
 
-@api_bp.route('/test')
-def api_test():
-    content = {'hi': 'this is a very quirky API endpoint'}
-    return to_json(content)
+@api_bp.route('/users')
+def api_users():
+    users = User.query.all()
+    return to_json(users)
+
+
+@api_bp.route('/users/<user_id>')
+def api_user(user_id):
+    user = User.query.get_or_404(user_id)
+    return to_json(user)
+
+
+@api_bp.route('/users/<user_id>/projects')
+def api_user_projects(user_id):
+    user = User.query.get_or_404(user_id)
+    return to_json(user.projects)
+
+
+@api_bp.route('/projects')
+def api_projects():
+    projects = Project.query.all()
+    return to_json(projects)
+
+
+@api_bp.route('/projects', methods=['POST'])
+@login_required
+def api_project_create():
+    # TODO: verify security implications
+    project = Project(user_id=g.user.id, created_at=get_now(), **g.json)
+    db.session.add(project)
+    db.session.commit()
+    return to_json(project)
+
+
+@api_bp.route('/projects/<project_id>')
+def api_project():
+    project = Project.query.get_or_404(project_id)
+    return to_json(project)
+
+
+@api_bp.route('/projects/<project_id>', methods=['PUT'])
+@login_required
+def api_project_update():
+    project = Project.query.get_or_404(project_id)
+    project.update(g.json)
+    db.session.commit()
+    return to_json(project)
