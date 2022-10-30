@@ -1,5 +1,5 @@
 from flask import render_template, request, jsonify, g
-from app import app, db, scraper
+from app import app, db
 #from app.models import
 
 
