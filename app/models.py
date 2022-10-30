@@ -57,6 +57,7 @@ class User(db.Model):
 class Project(db.Model):
     __tablename__ = 'project'
     __serializable__ = ('id', 'name', 'description', 'image_url')
+    __editable__ = {'name', 'description', 'image_url'}
 
     id = db.Column(db.String, primary_key=True)
     name = db.Column(db.String, required=True)
@@ -67,3 +68,8 @@ class Project(db.Model):
 
     user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', back_populates='reports')
+
+    def update(self, **new_values):
+        accepted_values = {key: value for key, value in new_values.items() if key in self.__editable__}
+        for key, value in accepted_values.items():
+            setattr(self, key, value)
