@@ -11,5 +11,6 @@ cors = CORS(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-from app import routes, models, errors, api, util
+from app import routes, models, errors, api, auth, util
 app.register_blueprint(api.api_bp, name='api')
+app.register_blueprint(auth.auth_bp, name='auth')

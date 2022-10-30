@@ -85,11 +85,13 @@ def register():
                 confirmed=False,
                 school_id=school.id,
             )
+            # TODO: reenable confirmation
+            user.confirmed = True
             # Insert the user
             db.session.add(user)
             db.session.commit()
 
-            send_confirmation_email(user)
+            #send_confirmation_email(user)
 
             return succ('Check your inbox at ' + email + ' to confirm! (The email may take a few moments to deliver.)', 201)
         except Exception as e:
