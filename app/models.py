@@ -15,6 +15,8 @@ class User(db.Model):
     last_seen = db.Column(db.Integer)
     admin = db.Column(db.Boolean, default=False)
 
+    projects = db.relationship('Project', cascade='all,delete', back_populates='user')
+
     def __init__(self, id: str):
         self.id = id
         self.registered_at = now
@@ -50,3 +52,18 @@ class User(db.Model):
         except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
             # Signature expired, or token otherwise invalid
             return None
+
+
+class Project(db.Model):
+    __tablename__ = 'project'
+    __serializable__ = ('id', 'name', 'description', 'image_url')
+
+    id = db.Column(db.String, primary_key=True)
+    name = db.Column(db.String, required=True)
+    description = db.Column(db.String)
+    image_url = db.Column(db.String)
+    created_at = db.Column(db.Integer)
+    updated_at = db.Column(db.Integer)
+
+    user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', back_populates='reports')
