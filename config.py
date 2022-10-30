@@ -7,3 +7,5 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL',
                                              'sqlite:///' + os.path.join(basedir, 'app.db')).replace('postgres://', 'postgresql://')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    WEB_DOMAIN = 'https://devfly.herokuapp.com'
