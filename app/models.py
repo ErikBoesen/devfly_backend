@@ -61,7 +61,7 @@ class Project(db.Model):
     __editable__ = {'name', 'description', 'image_url'}
 
     id = db.Column(db.String, primary_key=True)
-    name = db.Column(db.String, required=True)
+    name = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
     image_url = db.Column(db.String)
     created_at = db.Column(db.Integer)

@@ -83,7 +83,7 @@ def api_projects():
 
 
 @api_bp.route('/projects', methods=['POST'])
-@login_required
+@requires_login
 def api_project_create():
     # TODO: verify security implications
     project = Project(user_id=g.user.id, created_at=get_now(), **g.json)
@@ -99,7 +99,7 @@ def api_project():
 
 
 @api_bp.route('/projects/<project_id>', methods=['PUT'])
-@login_required
+@requires_login
 def api_project_update():
     project = Project.query.get_or_404(project_id)
     project.update(g.json)
