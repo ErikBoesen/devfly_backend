@@ -49,15 +49,6 @@ def setup_request():
         print('User: ' + (g.user.email if g.user else 'anonymous'))
 
 
-def requires_login(f):
-    @wraps(f)
-    def wrapper_requires_login(*args, **kwargs):
-        if g.user is None:
-            return fail('Endpoint requires valid Authorization header.', code=401)
-        return f(*args, **kwargs)
-    return wrapper_requires_login
-
-
 @api_bp.route('/users')
 def api_users():
     users = User.query.all()
@@ -83,7 +74,6 @@ def api_projects():
 
 
 @api_bp.route('/projects', methods=['POST'])
-@requires_login
 def api_project_create():
     # TODO: verify security implications
     project = Project(user_id=g.user.id, created_at=get_now(), **g.json)
@@ -99,7 +89,6 @@ def api_project():
 
 
 @api_bp.route('/projects/<project_id>', methods=['PUT'])
-@requires_login
 def api_project_update():
     project = Project.query.get_or_404(project_id)
     project.update(g.json)

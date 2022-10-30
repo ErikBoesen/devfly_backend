@@ -1,4 +1,4 @@
-from app import app, db
+from app import app, db, bcrypt
 import jwt
 import datetime
 
@@ -14,6 +14,7 @@ class User(db.Model):
     registered_at = db.Column(db.Integer)
     last_seen = db.Column(db.Integer)
     admin = db.Column(db.Boolean, default=False)
+    password = db.Column(db.String(255), nullable=False)
     confirmed = db.Column(db.Boolean)
 
     projects = db.relationship('Project', cascade='all,delete', back_populates='user')

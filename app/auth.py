@@ -5,15 +5,16 @@ from itsdangerous import URLSafeTimedSerializer
 from itsdangerous.exc import SignatureExpired
 
 from app import app, db, bcrypt
-from app.models import User, School, BlacklistedToken
+from app.models import User
 from app.util import succ, fail
-from app.mailgun import send_email, send_email_gmail
+#from app.mailgun import send_email, send_email_gmail
 
 
-auth = Blueprint('auth', __name__)
+auth_bp = Blueprint('auth', __name__)
 
 
-@auth.route('/confirm/<token>')
+"""
+@auth_bp.route('/confirm/<token>')
 def confirm_email(token):
     email = confirm_token(token)
     # If link is expired, False will be returned.
@@ -57,8 +58,9 @@ def send_confirmation_email(user):
         send_email(user.email, subject, html)
     else:
         send_email_gmail(user.email, subject, html)
+"""
 
-@auth.route('/register', methods=['POST'])
+@auth_bp.route('/register', methods=['POST'])
 def register():
     # get the post data
     payload = request.get_json()
@@ -100,7 +102,7 @@ def register():
         return fail('User already exists. Please log in.', 202)
 
 
-@auth.route('/login', methods=['POST'])
+@auth_bp.route('/login', methods=['POST'])
 def login():
     # get the post data
     payload = request.get_json()
@@ -147,7 +149,7 @@ def send_reset_password_email(user):
         send_email(user.email, subject, html)
 
 
-@auth.route('/reset_password_request', methods=['POST'])
+@auth_bp.route('/reset_password_request', methods=['POST'])
 def reset_password_request():
     # get the post data
     payload = request.get_json()
@@ -161,7 +163,7 @@ def reset_password_request():
     return succ('If this email has an associated account, a message has been sent to reset your password!', 201)
 
 
-@auth.route('/reset_password/<token>', methods=['GET', 'POST'])
+@auth_bp.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     email = confirm_token(token)
     # If link is expired, False will be returned.
@@ -178,7 +180,7 @@ def reset_password(token):
         return render_template('reset_password.html', message='Password reset successfully! You can now use it to log in on the Comethru mobile app.')
 
 
-@auth.route('/logout', methods=['POST'])
+@auth_bp.route('/logout', methods=['POST'])
 def logout():
     pass
     """

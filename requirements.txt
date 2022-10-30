@@ -2,6 +2,7 @@ flask
 flask-cors
 flask-sqlalchemy
 flask-migrate
+flask-bcrypt
 PyJWT>=2.3.0
 psycopg2
 gunicorn
