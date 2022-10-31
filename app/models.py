@@ -69,7 +69,7 @@ class Project(db.Model):
     updated_at = db.Column(db.Integer)
 
     user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', back_populates='reports')
+    user = db.relationship('User', back_populates='projects')
 
     def update(self, **new_values):
         accepted_values = {key: value for key, value in new_values.items() if key in self.__editable__}
