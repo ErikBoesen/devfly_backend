@@ -38,7 +38,7 @@ class ModelEncoder(json.JSONEncoder):
 
 
 def to_json(model):
-    return json.dumps(model, cls=ModelEncoder)
+    return Response(json.dumps(model, cls=ModelEncoder), mimetype='application/json')
 
 
 # HTTP response generators
