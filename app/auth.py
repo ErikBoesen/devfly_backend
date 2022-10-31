@@ -71,24 +71,24 @@ def register():
     # check if user already exists
     user = User.query.filter_by(email=email).first()
     if not user:
-        try:
-            user = User(
-                name=payload['name'].strip(),
-                email=email,
-                password=payload['password'],
-                confirmed=False,
-            )
-            # TODO: reenable confirmation
-            user.confirmed = True
-            # Insert the user
-            db.session.add(user)
-            db.session.commit()
+        #try:
+        user = User(
+            first_name=payload['first_name'].strip(),
+            last_name=payload['last_name'].strip(),
+            email=email,
+            password=payload['password'],
+        )
+        # TODO: reenable confirmation
+        user.confirmed = True
+        # Insert the user
+        db.session.add(user)
+        db.session.commit()
 
-            #send_confirmation_email(user)
+        #send_confirmation_email(user)
 
-            return succ('Check your inbox at ' + email + ' to confirm! (The email may take a few moments to deliver.)', 201)
-        except Exception as e:
-            return fail('Some error occurred. Please try again. Contact the developers if this continues to happen.', 500)
+        return succ('Check your inbox at ' + email + ' to confirm! (The email may take a few moments to deliver.)', 201)
+        #except Exception as e:
+        #    return fail('Some error occurred. Please try again. Contact the developers if this continues to happen.', 500)
     else:
         return fail('User already exists. Please log in.', 202)
 

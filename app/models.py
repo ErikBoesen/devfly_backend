@@ -1,6 +1,8 @@
 from app import app, db, bcrypt
+from app.util import get_now
 import jwt
 import datetime
+import uuid
 
 
 class User(db.Model):
@@ -19,20 +21,31 @@ class User(db.Model):
 
     projects = db.relationship('Project', cascade='all,delete', back_populates='user')
 
-    def __init__(self, id: str):
-        self.id = id
-        self.registered_at = now
-        self.last_seen = now
-        self.admin = False
+    def __init__(self, first_name: str, last_name: str, email: str, password: str):
+        self.id = str(uuid.uuid4())
+        self.first_name = first_name
+        self.last_name = last_name
+        self.set_password(password)
+
+        self.confirmed = False
+        self.registered_at = get_now()
+        self.last_seen = get_now()
+
+    def is_password_correct(self, password: str) -> bool:
+        return bcrypt.check_password_hash(self.password, password)
+
+    def set_password(self, password):
+        self.password = bcrypt.generate_password_hash(
+            password, app.config.get('BCRYPT_LOG_ROUNDS')
+        ).decode()
 
     def generate_token(self):
         """
         Generate auth token.
         :return: token and expiration timestamp.
         """
-        now = int(datetime.datetime.utcnow().timestamp())
         payload = {
-            'iat': now,
+            'iat': get_now(),
             'sub': self.id,
         }
         return jwt.encode(
