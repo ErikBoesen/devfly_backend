@@ -42,6 +42,8 @@ def setup_request():
             if g.user is not None:
                 g.user.last_seen = int(datetime.datetime.utcnow().timestamp())
                 db.session.commit()
+        if not g.user:
+            return fail('You must be authenticated to use this endpoint.', 401)
         try:
             g.json = request.get_json()
         except Exception as e:
