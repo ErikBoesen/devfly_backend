@@ -10,6 +10,7 @@ class User(db.Model):
     __serializable__ = ('id', 'email', 'first_name', 'last_name')
 
     id = db.Column(db.String, primary_key=True)
+    username = db.Column(db.String)
     email = db.Column(db.String)
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
@@ -21,8 +22,10 @@ class User(db.Model):
 
     projects = db.relationship('Project', cascade='all,delete', back_populates='user')
 
-    def __init__(self, first_name: str, last_name: str, email: str, password: str):
+    def __init__(self, username: str, email: str, first_name: str, last_name: str, password: str):
         self.id = str(uuid.uuid4())
+        self.username = username
+        self.email = email
         self.first_name = first_name
         self.last_name = last_name
         self.set_password(password)
