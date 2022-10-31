@@ -72,23 +72,11 @@ def register():
     user = User.query.filter_by(email=email).first()
     if not user:
         try:
-            with open('resources/email_blacklist.txt') as f:
-                # TODO: should we just keep this in memory continuously rather than reading it every time?
-                email_blacklist = f.read().split('\n')
-                if email in email_blacklist:
-                    return fail('Sorry, a student email address is required to register.', 401)
-            school = School.from_email(email)
-            if school is None:
-                # TODO: use non-Yale-specific message.
-                return fail('You must use a valid .edu email address from a supported school.', 401)
-
             user = User(
                 name=payload['name'].strip(),
                 email=email,
-                year=payload['year'],
                 password=payload['password'],
                 confirmed=False,
-                school_id=school.id,
             )
             # TODO: reenable confirmation
             user.confirmed = True
