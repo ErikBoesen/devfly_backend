@@ -51,6 +51,12 @@ class User(db.Model):
             'iat': get_now(),
             'sub': self.id,
         }
+        print(jwt.encode(
+            payload,
+            app.config.get('SECRET_KEY'),
+            algorithm='HS256'
+        ))
+
         return jwt.encode(
             payload,
             app.config.get('SECRET_KEY'),

@@ -6,7 +6,7 @@ from itsdangerous.exc import SignatureExpired
 
 from app import app, db, bcrypt
 from app.models import User
-from app.util import succ, fail
+from app.util import succ, fail, to_json
 #from app.mailgun import send_email, send_email_gmail
 
 
@@ -102,34 +102,27 @@ def login():
     except:
         return fail('Invalid JSON payload.')
     email = payload.get('email').lower()
-    try:
-        # fetch the user data
-        user = User.query.filter_by(email=email).first()
-        if user and user.is_password_correct(payload.get('password')):
-            if not user.confirmed:
-                send_confirmation_email(user)
-                return fail('Please check your email to confirm your account before logging in! It may take a few minutes to arrive. We have re-sent the email to you just in case.', 401)
-            token, expires_in = user.generate_token()
-            if token:
-                response_data = {
-                    'status': 'success',
-                    'message': 'Successfully logged in.',
-                    'token': token,
-                    'user': {
-                        'id': user.id,
-                        'name': user.name,
-                        # do we need this?
-                        'email': user.email,
-                        'token': token,
-                        'expires_in': expires_in,
-                    }
-                }
-                return jsonify(response_data), 200
-        else:
-            return fail('Sorry, we couldn\'t recognize that email or password.', 404)
-    except Exception as e:
-        print(e)
-        return fail('There was an unexpected error. Please try again! :)', 500)
+    #try:
+    # fetch the user data
+    user = User.query.filter_by(email=email).first()
+    if user and user.is_password_correct(payload.get('password')):
+        if not user.confirmed:
+            send_confirmation_email(user)
+            return fail('Please check your email to confirm your account before logging in! It may take a few minutes to arrive. We have re-sent the email to you just in case.', 401)
+        token = user.generate_token()
+        if token:
+            response_data = {
+                'status': 'success',
+                'message': 'Successfully logged in.',
+                'token': token,
+                'user': user,
+            }
+            return to_json(response_data)
+    else:
+        return fail('Sorry, we couldn\'t recognize that email or password.', 404)
+    #except Exception as e:
+    #    print(e)
+    #    return fail('There was an unexpected error. Please try again! :)', 500)
 
 
 def send_reset_password_email(user):
