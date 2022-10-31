@@ -73,9 +73,10 @@ def register():
     if not user:
         #try:
         user = User(
+            username=payload['username'].strip(),
+            email=email,
             first_name=payload['first_name'].strip(),
             last_name=payload['last_name'].strip(),
-            email=email,
             password=payload['password'],
         )
         # TODO: reenable confirmation
