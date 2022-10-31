@@ -7,18 +7,19 @@ import uuid
 
 class User(db.Model):
     __tablename__ = 'user'
-    __serializable__ = ('id', 'email', 'first_name', 'last_name')
+    __serializable__ = ('id', 'username', 'email', 'first_name', 'last_name')
 
     id = db.Column(db.String, primary_key=True)
     username = db.Column(db.String)
     email = db.Column(db.String)
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
-    registered_at = db.Column(db.Integer)
-    last_seen = db.Column(db.Integer)
     admin = db.Column(db.Boolean, default=False)
     password = db.Column(db.String(255), nullable=False)
     confirmed = db.Column(db.Boolean)
+
+    registered_at = db.Column(db.Integer)
+    last_seen = db.Column(db.Integer)
 
     projects = db.relationship('Project', cascade='all,delete', back_populates='user')
 
