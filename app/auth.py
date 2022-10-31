@@ -63,7 +63,10 @@ def send_confirmation_email(user):
 @auth_bp.route('/register', methods=['POST'])
 def register():
     # get the post data
-    payload = request.get_json()
+    try:
+        payload = request.get_json(force=True)
+    except:
+        return fail('Invalid JSON payload.')
     email = payload.get('email').lower().strip()
     # check if user already exists
     user = User.query.filter_by(email=email).first()
@@ -105,7 +108,10 @@ def register():
 @auth_bp.route('/login', methods=['POST'])
 def login():
     # get the post data
-    payload = request.get_json()
+    try:
+        payload = request.get_json(force=True)
+    except:
+        return fail('Invalid JSON payload.')
     email = payload.get('email').lower()
     try:
         # fetch the user data
