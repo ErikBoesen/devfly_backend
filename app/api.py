@@ -85,13 +85,13 @@ def api_project_create():
 
 
 @api_bp.route('/projects/<project_id>')
-def api_project():
+def api_project(project_id):
     project = Project.query.get_or_404(project_id)
     return to_json(project)
 
 
 @api_bp.route('/projects/<project_id>', methods=['PUT'])
-def api_project_update():
+def api_project_update(project_id):
     project = Project.query.get_or_404(project_id)
     project.update(g.json)
     db.session.commit()
