@@ -94,7 +94,7 @@ class Project(db.Model):
     user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', back_populates='projects')
 
-    def update(self, **new_values):
+    def update(self, new_values):
         accepted_values = {key: value for key, value in new_values.items() if key in self.__editable__}
         for key, value in accepted_values.items():
             setattr(self, key, value)
