@@ -98,3 +98,14 @@ class Project(db.Model):
         accepted_values = {key: value for key, value in new_values.items() if key in self.__editable__}
         for key, value in accepted_values.items():
             setattr(self, key, value)
+
+
+class Tag(db.Model):
+    __tablename__ = 'tag'
+
+    name = db.Column(db.String(32), primary_key=True)
+
+    events = db.relationship(
+        'Project', secondary=taggings,
+        backref=db.backref('tags', lazy='dynamic'), lazy='dynamic'
+    )
