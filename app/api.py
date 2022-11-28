@@ -96,3 +96,40 @@ def api_project_update(project_id):
     project.update(g.json)
     db.session.commit()
     return to_json(project)
+
+
+@api.route('/projects/<project_id>/tags/<tag_name>', methods=['POST'])
+def add_tag(project_id, tag_name):
+    project = Project.query.get_or_404(project_id)
+    tag_name = tag_name.lower()
+    if not (g.me.admin or project.is_hosted_by(g.me)):
+        abort(403)
+    # First, check if the project already has this tag.
+    if project.has_tag(tag_name):
+        return fail('Project already has this tag.')
+    if project.add_tag(tag_name):
+        db.session.commit()
+        return succ('Added tag!')
+    # If the tag is blacklisted or there was another problem
+    return fail('Tag not added.')
+
+
+@api.route('/projects/<project_id>/tags/<tag_name>', methods=['DELETE'])
+def remove_tag(project_id, tag_name):
+    project = Project.query.get_or_404(project_id)
+    if not (g.me.admin or project.is_hosted_by(g.me)):
+        abort(403)
+    if not project.has_tag(tag_name):
+        return fail('Project does not have this tag.')
+    if project.remove_tag(tag_name):
+        db.session.commit()
+        return succ('Removed tag.')
+    # Should not be reached, but just in case.
+    return fail('Tag not removed.')
+
+
+@api.route('/tags/search/<query>')
+def search_tags(query):
+    query = query.lower()
+    tags = Tag.query.filter(User.name.ilike('%' + query + '%'))
+    return jsonify([tag.name for tag in tags])
