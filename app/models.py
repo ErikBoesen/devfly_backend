@@ -5,6 +5,13 @@ import datetime
 import uuid
 
 
+# Many-to-many relationships
+taggings = db.Table('taggings',
+    db.Column('project_id', db.Integer, db.ForeignKey('projects.id'), nullable=False),
+    db.Column('tag_name', db.String, db.ForeignKey('tags.name'), nullable=False),
+)
+
+
 class User(db.Model):
     __tablename__ = 'user'
     __serializable__ = ('id', 'username', 'email', 'first_name', 'last_name')
@@ -99,13 +106,34 @@ class Project(db.Model):
         for key, value in accepted_values.items():
             setattr(self, key, value)
 
+    def has_tag(self, tag_name) -> bool:
+        return self.tags.filter(taggings.c.tag_name == tag_name).count() > 0
+
+    def add_tag(self, tag_name) -> bool:
+        tag = Tag.query.get(tag_name)
+        # Do we need to create the tag in the database?
+        if tag is None:
+            # Fail if the tag is blacklisted
+            with open('resources/tag_blacklist.txt', 'r') as f:
+                if tag in f.readlines():
+                    return False
+            tag = Tag(tag_name)
+            db.session.add(tag)
+        self.tags.append(tag)
+        return True
+
+    def remove_tag(self, tag_name) -> bool:
+        tag = Tag.query.get(tag_name)
+        self.tags.remove(tag)
+        return True
+
 
 class Tag(db.Model):
     __tablename__ = 'tag'
 
     name = db.Column(db.String(32), primary_key=True)
 
-    events = db.relationship(
+    projects = db.relationship(
         'Project', secondary=taggings,
         backref=db.backref('tags', lazy='dynamic'), lazy='dynamic'
     )
