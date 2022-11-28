@@ -98,7 +98,7 @@ def api_project_update(project_id):
     return to_json(project)
 
 
-@api.route('/projects/<project_id>/tags/<tag_name>', methods=['POST'])
+@api_bp.route('/projects/<project_id>/tags/<tag_name>', methods=['POST'])
 def add_tag(project_id, tag_name):
     project = Project.query.get_or_404(project_id)
     tag_name = tag_name.lower()
@@ -114,7 +114,7 @@ def add_tag(project_id, tag_name):
     return fail('Tag not added.')
 
 
-@api.route('/projects/<project_id>/tags/<tag_name>', methods=['DELETE'])
+@api_bp.route('/projects/<project_id>/tags/<tag_name>', methods=['DELETE'])
 def remove_tag(project_id, tag_name):
     project = Project.query.get_or_404(project_id)
     if not (g.me.admin or project.is_hosted_by(g.me)):
@@ -128,7 +128,7 @@ def remove_tag(project_id, tag_name):
     return fail('Tag not removed.')
 
 
-@api.route('/tags/search/<query>')
+@api_bp.route('/tags/search/<query>')
 def search_tags(query):
     query = query.lower()
     tags = Tag.query.filter(User.name.ilike('%' + query + '%'))

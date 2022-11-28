@@ -7,8 +7,8 @@ import uuid
 
 # Many-to-many relationships
 taggings = db.Table('taggings',
-    db.Column('project_id', db.Integer, db.ForeignKey('projects.id'), nullable=False),
-    db.Column('tag_name', db.String, db.ForeignKey('tags.name'), nullable=False),
+    db.Column('project_id', db.Integer, db.ForeignKey('project.id'), nullable=False),
+    db.Column('tag_name', db.String, db.ForeignKey('tag.name'), nullable=False),
 )
 
 
@@ -114,9 +114,6 @@ class Project(db.Model):
         # Do we need to create the tag in the database?
         if tag is None:
             # Fail if the tag is blacklisted
-            with open('resources/tag_blacklist.txt', 'r') as f:
-                if tag in f.readlines():
-                    return False
             tag = Tag(tag_name)
             db.session.add(tag)
         self.tags.append(tag)
