@@ -6,8 +6,8 @@ import uuid
 
 
 # Many-to-many relationships
-taggings = db.Table('taggings',
-    db.Column('project_id', db.Integer, db.ForeignKey('project.id'), nullable=False),
+taggings = db.Table('tagging',
+    db.Column('project_id', db.String, db.ForeignKey('project.id'), nullable=False),
     db.Column('tag_name', db.String, db.ForeignKey('tag.name'), nullable=False),
 )
 
