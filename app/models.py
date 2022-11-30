@@ -134,3 +134,18 @@ class Tag(db.Model):
         'Project', secondary=taggings,
         backref=db.backref('tags', lazy='dynamic'), lazy='dynamic'
     )
+
+
+class Review(db.Model):
+    __tablename__ = 'review'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    created_at = db.Column(db.Integer)
+    updated_at = db.Column(db.Integer)
+
+    user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', back_populates='reviews')
+
+    project_id = db.Column(db.String, db.ForeignKey('project.id'), nullable=False)
+    project = db.relationship('Project', back_populates='reviews')
