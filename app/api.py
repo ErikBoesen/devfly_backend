@@ -1,7 +1,7 @@
 from flask import Blueprint, request, abort, g
 
 from app import app, db
-from app.models import User, Project
+from app.models import User, Project, Review
 from app.util import to_json, succ, fail, get_now
 
 import datetime
@@ -40,7 +40,7 @@ def setup_request():
             token = token.split(' ')[-1]
             g.user = User.from_token(token)
             if g.user is not None:
-                g.user.last_seen = int(datetime.datetime.utcnow().timestamp())
+                g.user.last_seen = get_now()
                 db.session.commit()
         if not g.user:
             return fail('You must be authenticated to use this endpoint.', 401)
@@ -133,3 +133,31 @@ def search_tags(query):
     query = query.lower()
     tags = Tag.query.filter(User.name.ilike('%' + query + '%'))
     return jsonify([tag.name for tag in tags])
+
+
+# This is a kinda useless endpoint
+"""
+@api_bp.route('/projects/<project_id>/reviews')
+def api_project_item_reviews(project_id):
+    project = Project.query.get_or_404(project_id)
+    return to_json(project.reviews)
+"""
+
+
+@api_bp.route('/projects/<project_id>/reviews', methods=['POST'])
+def api_project_item_reviews_create(project_id):
+    project = Project.query.get_or_404(project_id)
+    review = Review.query.filter_by(user_id=g.me.id, project_id=project_id).first()
+    if review is None:
+        review = Review(created_at=get_now(), user_id=g.me.id, project_id=project_id)
+        db.session.add()
+        db.session.commit()
+    return to_json(project.reviews)
+
+
+@api_bp.route('/reviews/<review_id>', methods=['DELETE'])
+def api_project_item_reviews_create(review_id):
+    review = Review.query.get_or_404(review_id)
+    db.session.delete(review)
+    db.session.commit()
+    return succ('Review removed.')
