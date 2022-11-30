@@ -69,6 +69,13 @@ def api_user_projects(user_id):
     return to_json(user.projects)
 
 
+@api_bp.route('/search/search/<query>')
+def search_users(query):
+    query = query.lower()
+    users = User.query.filter(User.name.ilike('%' + query + '%'))
+    return jsonify(users)
+
+
 @api_bp.route('/projects')
 def api_projects():
     projects = Project.query.all()
@@ -131,7 +138,7 @@ def remove_tag(project_id, tag_name):
 @api_bp.route('/tags/search/<query>')
 def search_tags(query):
     query = query.lower()
-    tags = Tag.query.filter(User.name.ilike('%' + query + '%'))
+    tags = Tag.query.filter(Tag.name.ilike('%' + query + '%'))
     return jsonify([tag.name for tag in tags])
 
 
