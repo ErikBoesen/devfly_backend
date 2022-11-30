@@ -95,11 +95,15 @@ class Project(db.Model):
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
     image_url = db.Column(db.String)
+    like_count = db.Column(db.Integer, default=0)
+
     created_at = db.Column(db.Integer)
     updated_at = db.Column(db.Integer)
 
     user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', back_populates='projects')
+
+    reviews = db.relationship('Review', cascade='all,delete', back_populates='item')
 
     def update(self, new_values):
         accepted_values = {key: value for key, value in new_values.items() if key in self.__editable__}
@@ -123,6 +127,9 @@ class Project(db.Model):
         tag = Tag.query.get(tag_name)
         self.tags.remove(tag)
         return True
+
+    def update_like_count(self):
+        self.like_count = self.reviews.count()
 
 
 class Tag(db.Model):

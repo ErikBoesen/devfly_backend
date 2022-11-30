@@ -152,6 +152,7 @@ def api_project_item_reviews_create(project_id):
         review = Review(created_at=get_now(), user_id=g.me.id, project_id=project_id)
         db.session.add()
         db.session.commit()
+    project.update_like_count()
     return to_json(project.reviews)
 
 
@@ -160,4 +161,5 @@ def api_project_item_reviews_delete(project_id):
     review = Review.query.filter_by(user_id=g.me.id, project_id=project_id).first_or_404()
     db.session.delete(review)
     db.session.commit()
+    project.update_like_count()
     return succ('Review removed.')
