@@ -88,7 +88,7 @@ class User(db.Model):
 
 class Project(db.Model):
     __tablename__ = 'project'
-    __serializable__ = ('id', 'name', 'description', 'image_url')
+    __serializable__ = ('id', 'name', 'description', 'image_url', 'like_count')
     __editable__ = {'name', 'description', 'image_url'}
 
     id = db.Column(db.String, primary_key=True)
