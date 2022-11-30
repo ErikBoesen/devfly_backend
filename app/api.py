@@ -156,7 +156,7 @@ def api_project_item_reviews_create(project_id):
 
 
 @api_bp.route('/reviews/<review_id>', methods=['DELETE'])
-def api_project_item_reviews_create(review_id):
+def api_project_item_reviews_delete(review_id):
     review = Review.query.get_or_404(review_id)
     db.session.delete(review)
     db.session.commit()
