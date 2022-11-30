@@ -155,9 +155,9 @@ def api_project_item_reviews_create(project_id):
     return to_json(project.reviews)
 
 
-@api_bp.route('/reviews/<review_id>', methods=['DELETE'])
-def api_project_item_reviews_delete(review_id):
-    review = Review.query.get_or_404(review_id)
+@api_bp.route('/projects/<project_id>/reviews', methods=['DELETE'])
+def api_project_item_reviews_delete(project_id):
+    review = Review.query.filter_by(user_id=g.me.id, project_id=project_id).first_or_404()
     db.session.delete(review)
     db.session.commit()
     return succ('Review removed.')
