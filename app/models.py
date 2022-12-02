@@ -96,6 +96,7 @@ class Project(db.Model):
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
     image_url = db.Column(db.String)
+    github_url = db.Column(db.String)
     like_count = db.Column(db.Integer, default=0)
 
     created_at = db.Column(db.Integer)
