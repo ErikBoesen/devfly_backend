@@ -135,6 +135,7 @@ class Project(db.Model):
 
     def update_like_count(self):
         self.like_count = len(self.reviews)
+        db.session.commit()
 
 
 class Tag(db.Model):
