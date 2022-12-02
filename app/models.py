@@ -103,7 +103,7 @@ class Project(db.Model):
     user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', back_populates='projects')
 
-    reviews = db.relationship('Review', cascade='all,delete', back_populates='item')
+    reviews = db.relationship('Review', cascade='all,delete', back_populates='project')
 
     def update(self, new_values):
         accepted_values = {key: value for key, value in new_values.items() if key in self.__editable__}
