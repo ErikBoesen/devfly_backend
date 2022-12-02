@@ -104,6 +104,9 @@ class Project(db.Model):
     user = db.relationship('User', back_populates='projects')
 
     reviews = db.relationship('Review', cascade='all,delete', back_populates='project')
+    tags = db.relationship(
+        'Tag', secondary=taggings, lazy='subquery',
+        backref=db.backref('projects', lazy=True))
 
     def update(self, new_values):
         accepted_values = {key: value for key, value in new_values.items() if key in self.__editable__}
