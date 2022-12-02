@@ -106,7 +106,7 @@ def api_project_update(project_id):
 
 
 @api_bp.route('/projects/search/<query>')
-def search_users(query):
+def search_projects(query):
     query = query.lower()
     projects = Project.query.filter(Project.name.ilike('%' + query + '%'))
     return jsonify(projects)
