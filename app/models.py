@@ -140,11 +140,6 @@ class Tag(db.Model):
 
     name = db.Column(db.String(32), primary_key=True)
 
-    projects = db.relationship(
-        'Project', secondary=taggings,
-        backref=db.backref('tags', lazy='dynamic'), lazy='dynamic'
-    )
-
 
 class Review(db.Model):
     __tablename__ = 'review'
