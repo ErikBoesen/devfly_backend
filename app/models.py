@@ -145,6 +145,7 @@ class Tag(db.Model):
 
 class Review(db.Model):
     __tablename__ = 'review'
+    __serializable__ = ('id', 'user_id', 'project_id')
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
