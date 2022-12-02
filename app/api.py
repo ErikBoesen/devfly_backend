@@ -72,7 +72,7 @@ def api_user_projects(user_id):
 @api_bp.route('/users/search/<query>')
 def search_users(query):
     query = query.lower()
-    users = User.query.filter(User.name.ilike('%' + query + '%'))
+    users = User.query.filter(User.name.ilike('%' + query + '%')).all()
     return jsonify(users)
 
 
@@ -108,7 +108,7 @@ def api_project_update(project_id):
 @api_bp.route('/projects/search/<query>')
 def search_projects(query):
     query = query.lower()
-    projects = Project.query.filter(Project.name.ilike('%' + query + '%'))
+    projects = Project.query.filter(Project.name.ilike('%' + query + '%')).all()
     return jsonify(projects)
 
 
