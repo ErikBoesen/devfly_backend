@@ -29,6 +29,7 @@ class User(db.Model):
     last_seen = db.Column(db.Integer)
 
     projects = db.relationship('Project', cascade='all,delete', back_populates='user')
+    reviews = db.relationship('Review', cascade='all,delete', back_populates='user')
 
     def __init__(self, username: str, email: str, first_name: str, last_name: str, password: str):
         self.id = str(uuid.uuid4())
