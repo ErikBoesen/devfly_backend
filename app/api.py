@@ -69,7 +69,7 @@ def api_user_projects(user_id):
     return to_json(user.projects)
 
 
-@api_bp.route('/search/search/<query>')
+@api_bp.route('/users/search/<query>')
 def search_users(query):
     query = query.lower()
     users = User.query.filter(User.name.ilike('%' + query + '%'))
@@ -103,6 +103,13 @@ def api_project_update(project_id):
     project.update(g.json)
     db.session.commit()
     return to_json(project)
+
+
+@api_bp.route('/projects/search/<query>')
+def search_users(query):
+    query = query.lower()
+    projects = Project.query.filter(Project.name.ilike('%' + query + '%'))
+    return jsonify(projects)
 
 
 @api_bp.route('/projects/<project_id>/tags/<tag_name>', methods=['POST'])
