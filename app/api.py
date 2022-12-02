@@ -109,6 +109,7 @@ def api_project_update(project_id):
 def search_projects(query):
     query = query.lower()
     projects = Project.query.filter(Project.name.ilike('%' + query + '%')).all()
+    print(projects)
     return to_json(projects)
 
 
