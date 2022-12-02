@@ -73,7 +73,7 @@ def api_user_projects(user_id):
 def search_users(query):
     query = query.lower()
     users = User.query.filter(User.name.ilike('%' + query + '%')).all()
-    return jsonify(users)
+    return to_json(users)
 
 
 @api_bp.route('/projects')
@@ -109,7 +109,7 @@ def api_project_update(project_id):
 def search_projects(query):
     query = query.lower()
     projects = Project.query.filter(Project.name.ilike('%' + query + '%')).all()
-    return jsonify(projects)
+    return to_json(projects)
 
 
 @api_bp.route('/projects/<project_id>/tags/<tag_name>', methods=['POST'])
@@ -146,7 +146,7 @@ def remove_tag(project_id, tag_name):
 def search_tags(query):
     query = query.lower()
     tags = Tag.query.filter(Tag.name.ilike('%' + query + '%'))
-    return jsonify([tag.name for tag in tags])
+    return to_json([tag.name for tag in tags])
 
 
 # This is a kinda useless endpoint
