@@ -105,6 +105,7 @@ def api_project_update(project_id):
     return to_json(project)
 
 
+@api_bp.route('/projects/search/', defaults={'query': ''})
 @api_bp.route('/projects/search/<query>')
 def search_projects(query):
     query = query.lower()
