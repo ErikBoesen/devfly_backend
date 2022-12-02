@@ -118,7 +118,7 @@ def search_projects(query):
 def add_tag(project_id, tag_name):
     project = Project.query.get_or_404(project_id)
     tag_name = tag_name.lower()
-    if not (g.me.admin or project.is_hosted_by(g.me)):
+    if not (g.user.admin or project.is_hosted_by(g.user)):
         abort(403)
     # First, check if the project already has this tag.
     if project.has_tag(tag_name):
@@ -133,7 +133,7 @@ def add_tag(project_id, tag_name):
 @api_bp.route('/projects/<project_id>/tags/<tag_name>', methods=['DELETE'])
 def remove_tag(project_id, tag_name):
     project = Project.query.get_or_404(project_id)
-    if not (g.me.admin or project.is_hosted_by(g.me)):
+    if not (g.user.admin or project.is_hosted_by(g.user)):
         abort(403)
     if not project.has_tag(tag_name):
         return fail('Project does not have this tag.')
@@ -163,9 +163,9 @@ def api_project_item_reviews(project_id):
 @api_bp.route('/projects/<project_id>/reviews', methods=['POST'])
 def api_project_item_reviews_create(project_id):
     project = Project.query.get_or_404(project_id)
-    review = Review.query.filter_by(user_id=g.me.id, project_id=project_id).first()
+    review = Review.query.filter_by(user_id=g.user.id, project_id=project_id).first()
     if review is None:
-        review = Review(created_at=get_now(), user_id=g.me.id, project_id=project_id)
+        review = Review(created_at=get_now(), user_id=g.user.id, project_id=project_id)
         db.session.add()
         db.session.commit()
     project.update_like_count()
@@ -174,7 +174,7 @@ def api_project_item_reviews_create(project_id):
 
 @api_bp.route('/projects/<project_id>/reviews', methods=['DELETE'])
 def api_project_item_reviews_delete(project_id):
-    review = Review.query.filter_by(user_id=g.me.id, project_id=project_id).first_or_404()
+    review = Review.query.filter_by(user_id=g.user.id, project_id=project_id).first_or_404()
     db.session.delete(review)
     db.session.commit()
     project.update_like_count()
