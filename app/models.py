@@ -134,7 +134,7 @@ class Project(db.Model):
         return True
 
     def update_like_count(self):
-        self.like_count = self.reviews.count()
+        self.like_count = len(self.reviews)
 
 
 class Tag(db.Model):
