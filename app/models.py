@@ -86,6 +86,11 @@ class User(db.Model):
             # Signature expired, or token otherwise invalid
             return None
 
+    def extra_props(self):
+        return {
+            'tags': [tag.name for tag in self.tags],
+        }
+
 
 class Project(db.Model):
     __tablename__ = 'project'
