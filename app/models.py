@@ -96,6 +96,7 @@ class Project(db.Model):
     __tablename__ = 'project'
     __serializable__ = ('id', 'name', 'description', 'image_url', 'github_url', 'like_count')
     __editable__ = {'name', 'description', 'image_url', 'github_url'}
+    _to_expand = {'user'}
 
     id = db.Column(db.String, primary_key=True)
     name = db.Column(db.String, nullable=False)
