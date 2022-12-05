@@ -32,9 +32,10 @@ class ModelEncoder(json.JSONEncoder):
                         continue
                 fields[field] = self.val_to_string(val)
 
-                if getattr(obj, 'extra_props', None):
-                    fields.update(obj.extra_props())
-                    print(obj.extra_props())
+            if getattr(obj, 'extra_props', None):
+                fields.update(obj.extra_props())
+                print(obj.extra_props())
+            print(fields)
             # a json-encodable dict
             return fields
 
