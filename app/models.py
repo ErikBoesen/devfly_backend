@@ -89,7 +89,7 @@ class User(db.Model):
 
 class Project(db.Model):
     __tablename__ = 'project'
-    __serializable__ = ('id', 'name', 'description', 'image_url', 'github_url', 'like_count')
+    __serializable__ = ('id', 'name', 'description', 'image_url', 'github_url', 'like_count', 'user')
     __editable__ = {'name', 'description', 'image_url', 'github_url'}
     _to_expand = {'user'}
 
