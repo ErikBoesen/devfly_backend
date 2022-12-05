@@ -34,6 +34,7 @@ class ModelEncoder(json.JSONEncoder):
 
                 if getattr(obj, 'extra_props', None):
                     fields.update(obj.extra_props())
+                    print(obj.extra_props())
             # a json-encodable dict
             return fields
 
