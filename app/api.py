@@ -102,8 +102,12 @@ def api_project(project_id):
 
 @api_bp.route('/projects/<project_id>', methods=['PUT'])
 def api_project_update(project_id):
+    tags = g.json.pop('tags')
     project = Project.query.get_or_404(project_id)
     project.update(g.json)
+    project.tags[:] = []
+    for tag_name in tags:
+        project.add_tag(tag_name.lower())
     db.session.commit()
     return to_json(project)
 
