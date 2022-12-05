@@ -86,11 +86,6 @@ class User(db.Model):
             # Signature expired, or token otherwise invalid
             return None
 
-    def extra_props(self):
-        return {
-            'tags': [tag.name for tag in self.tags],
-        }
-
 
 class Project(db.Model):
     __tablename__ = 'project'
@@ -142,6 +137,11 @@ class Project(db.Model):
     def update_like_count(self):
         self.like_count = len(self.reviews)
         db.session.commit()
+
+    def extra_props(self):
+        return {
+            'tags': [tag.name for tag in self.tags],
+        }
 
 
 class Tag(db.Model):
