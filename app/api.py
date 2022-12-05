@@ -84,9 +84,12 @@ def api_projects():
 
 @api_bp.route('/projects', methods=['POST'])
 def api_project_create():
+    tags = g.json.pop('tags')
     # TODO: verify security implications
     project = Project(user_id=g.user.id, created_at=get_now(), **g.json)
     db.session.add(project)
+    for tag_name in tags:
+        project.add_tag(tag_name.lower())
     db.session.commit()
     return to_json(project)
 
