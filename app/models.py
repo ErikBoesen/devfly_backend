@@ -124,7 +124,7 @@ class Project(db.Model):
         # Do we need to create the tag in the database?
         if tag is None:
             # Fail if the tag is blacklisted
-            tag = Tag(tag_name)
+            tag = Tag(name=tag_name)
             db.session.add(tag)
         self.tags.append(tag)
         return True
